@@ -24,7 +24,7 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "BIP54 Dashboard — Consensus Cleanup",
   description:
-    "Track BIP54 signaling progress, explore the Consensus Cleanup proposal, and simulate the problems it fixes.",
+    "Track BIP54 readiness (including pool coinbase compatibility), explore the Consensus Cleanup proposal, and simulate the problems it fixes.",
 };
 
 export default function RootLayout({

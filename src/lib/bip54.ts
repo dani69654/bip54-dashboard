@@ -4,14 +4,76 @@ export const BIP54 = {
   tagline:
     "A soft fork proposal that closes four long-standing Bitcoin consensus weaknesses.",
   author: "Antoine Poinsot",
-  status: "Proposed",
+  coAuthor: "Matt Corallo",
+  status: "Draft",
   type: "Standards Track — Consensus (soft fork)",
   created: "2025",
   activation: {
     method: "Not yet finalized",
     signaling: "Not started",
-    threshold: "TBD (historically ~95% of blocks in a difficulty period)",
-    note: "Previous soft forks used BIP9 or BIP8 version-bit signaling. BIP54’s activation mechanism is still under community discussion.",
+    threshold: "TBD (historically ~90–95% of blocks in a difficulty period)",
+    note: "No activation bit has been assigned. Previous soft forks used BIP9 or BIP8 version-bit signaling. BIP54’s activation mechanism is still under community discussion — separate from pool forward-compatibility.",
+  },
+  /**
+   * Forward-compatible coinbase locktimes (nLockTime = height − 1).
+   * This is readiness / compatibility, NOT formal soft-fork signaling.
+   * Source: mainnet.observer (as of 2026-07-28).
+   */
+  poolReadiness: {
+    asOf: "2026-07-28",
+    recentSharePct: 40,
+    recentShareNote:
+      "About 40% of recent mainnet blocks already set coinbase nLockTime = height − 1 (BIP54-compatible). This is not version-bit signaling.",
+    sourceLabel: "mainnet.observer",
+    sourceHref: "https://mainnet.observer/",
+    chartHref:
+      "https://mainnet.observer/",
+    poolsHref:
+      "https://mainnet.observer/csv/miningpools-mining-bip54-coinbase.csv",
+    pools: [
+      {
+        name: "Foundry USA",
+        firstHeight: 952880,
+        firstDate: "2026-06-08",
+        compatibleBlocks: 1834,
+        note: "Largest adopter by compatible-block count so far",
+      },
+      {
+        name: "MARA Pool",
+        firstHeight: 940548,
+        firstDate: "2026-03-13",
+        compatibleBlocks: 938,
+        note: "Early major-pool adopter",
+      },
+      {
+        name: "ViaBTC",
+        firstHeight: 949094,
+        firstDate: "2026-05-12",
+        compatibleBlocks: 886,
+        note: "Partial rollout reported at first (mixed pool software)",
+      },
+      {
+        name: "WhitePool",
+        firstHeight: 937404,
+        firstDate: "2026-02-19",
+        compatibleBlocks: 28,
+        note: "Among the first BIP54-compatible mainnet blocks",
+      },
+      {
+        name: "CKPool / Solo CK",
+        firstHeight: 951408,
+        firstDate: "2026-05-28",
+        compatibleBlocks: 5,
+        note: "Small open pool / solo mining",
+      },
+      {
+        name: "Unknown",
+        firstHeight: 940484,
+        firstDate: "2026-03-13",
+        compatibleBlocks: 2,
+        note: "Unattributed miners",
+      },
+    ],
   },
   fixes: [
     {
@@ -68,6 +130,12 @@ export const BIP54 = {
       href: "https://bip54.org/",
     },
     {
+      title: "mainnet.observer — BIP54 coinbases",
+      description:
+        "Live chart of blocks with BIP54-compatible coinbase locktimes, plus first-by-pool table.",
+      href: "https://mainnet.observer/",
+    },
+    {
       title: "Bitcoin Optech topic",
       description: "News and technical notes on the consensus cleanup soft fork.",
       href: "https://bitcoinops.org/en/topics/consensus-cleanup-soft-fork/",
@@ -92,17 +160,19 @@ export const BIP54 = {
     {
       year: "2023–24",
       label: "Revival",
-      detail: "Antoine Poinsot restarts research and community discussion on Delving Bitcoin.",
+      detail:
+        "Antoine Poinsot restarts research and community discussion on Delving Bitcoin.",
     },
     {
       year: "2025",
       label: "BIP54 published",
-      detail: "Specification merged into bitcoin/bips as BIP54.",
+      detail: "Specification merged into bitcoin/bips as BIP54 (Draft).",
     },
     {
       year: "2026",
-      label: "Implementations",
-      detail: "Tested on Bitcoin Inquisition / Signet; Core PR for consensus rules under review.",
+      label: "Pool forward-compat",
+      detail:
+        "WhitePool, MARA, ViaBTC, Foundry and others produce BIP54-compatible coinbases (~40% of recent blocks). Formal activation signaling still not started.",
     },
   ],
 } as const;

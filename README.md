@@ -24,4 +24,4 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Notes
 
-Signaling has not started and the activation method is not finalized. Dashboard signaling figures reflect that pre-activation state and are for education, not live miner telemetry.
+Formal version-bit signaling has **not** started (activation method TBD). Some mining pools already produce **BIP54-compatible coinbases** (`nLockTime = height − 1`) — that is forward-compatibility, not a vote for activation. Pool/share figures on the dashboard are snapshot values from [mainnet.observer](https://mainnet.observer/) and should be refreshed periodically.
