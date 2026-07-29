@@ -186,8 +186,8 @@ export function DuplicateCoinbaseSim({ bip54On }: Props) {
               onChange={(e) => setHeight(Number(e.target.value))}
             />
             <p className="mt-2 text-xs text-fg-subtle">
-              Near 2,000,000 the old temporary fix would get expensive again
-              without BIP54.
+              From block 1,983,702 the old temporary fix (explicit BIP30 checks)
+              would have to come back without BIP54.
             </p>
           </div>
 

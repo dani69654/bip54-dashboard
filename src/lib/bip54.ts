@@ -5,9 +5,9 @@ export const BIP54 = {
     "A soft fork proposal that closes four long-standing Bitcoin consensus weaknesses.",
   author: "Antoine Poinsot",
   coAuthor: "Matt Corallo",
-  status: "Draft",
-  type: "Standards Track — Consensus (soft fork)",
-  created: "2025",
+  status: "Complete",
+  type: "Specification — Layer: Consensus (soft fork)",
+  created: "2025-04-11",
   activation: {
     method: "Not yet finalized",
     signaling: "Not started",
@@ -21,13 +21,13 @@ export const BIP54 = {
    */
   poolReadiness: {
     asOf: "2026-07-28",
-    recentSharePct: 40,
+    recentSharePct: 42,
     recentShareNote:
-      "About 40% of recent mainnet blocks already set coinbase nLockTime = height − 1 (BIP54-compatible). This is not version-bit signaling.",
+      "On 2026-07-28, 42.4% of mainnet coinbases set nLockTime = height − 1 (BIP54-compatible); the trailing 7-day average was 41.6%. This is not version-bit signaling.",
     sourceLabel: "mainnet.observer",
     sourceHref: "https://mainnet.observer/",
     chartHref:
-      "https://mainnet.observer/",
+      "https://mainnet.observer/charts/transactions-coinbase-locktime-bip54/",
     poolsHref:
       "https://mainnet.observer/csv/miningpools-mining-bip54-coinbase.csv",
     pools: [
@@ -60,11 +60,18 @@ export const BIP54 = {
         note: "Among the first BIP54-compatible mainnet blocks",
       },
       {
-        name: "CKPool / Solo CK",
+        name: "Solo CK",
         firstHeight: 951408,
         firstDate: "2026-05-28",
-        compatibleBlocks: 5,
-        note: "Small open pool / solo mining",
+        compatibleBlocks: 3,
+        note: "Solo mining via ckpool",
+      },
+      {
+        name: "CKPool",
+        firstHeight: 956021,
+        firstDate: "2026-06-30",
+        compatibleBlocks: 2,
+        note: "Small open pool",
       },
       {
         name: "Unknown",
@@ -82,14 +89,14 @@ export const BIP54 = {
       summary:
         "Stops miners from manipulating timestamps across difficulty periods to drive difficulty toward the minimum.",
       impact:
-        "Without a fix, a hashrate majority could eventually produce ~6 blocks/second and mine remaining subsidy in ~40 days.",
+        "A majority-hashrate attacker can bring difficulty down to its minimum within 38 days, arbitrarily raising the block rate and stealing subsidy from future miners.",
       fix: "Require a minimum timestamp for the first block of each difficulty period, plus a non-negative period duration.",
     },
     {
       id: "poison",
       name: "Slow-to-validate blocks",
       summary:
-        "Legacy scripts can be crafted so a valid block takes an hour or more to verify on modest hardware.",
+        "Legacy scripts can be crafted so a valid block takes several minutes to verify on high-end hardware, and up to a few hours on lower-end devices.",
       impact:
         "Creates DoS pressure, favors large miners, and pushes out node operators on consumer hardware.",
       fix: "Cap legacy signature operations at 2,500 per non-coinbase transaction (~40× better worst-case validation).",
@@ -107,7 +114,7 @@ export const BIP54 = {
       id: "duplicate",
       name: "Duplicate coinbase risk",
       summary:
-        "BIP30 prevents duplicate txids, but a BIP34 gap means expensive checks return near block ~2,000,000.",
+        "BIP30 prevents duplicate txids, but early BIP34 violations mean explicit BIP30 checks must return at block 1,983,702.",
       impact:
         "Extra validation cost forever, and designs like Utreexo struggle with BIP30-style checks.",
       fix: "Require coinbase nLockTime = height − 1 (and nSequence ≠ 0xffffffff) so uniqueness is built-in.",
@@ -132,8 +139,13 @@ export const BIP54 = {
     {
       title: "mainnet.observer — BIP54 coinbases",
       description:
-        "Live chart of blocks with BIP54-compatible coinbase locktimes, plus first-by-pool table.",
-      href: "https://mainnet.observer/",
+        "Live chart of the share of blocks with BIP54-compatible coinbase locktimes.",
+      href: "https://mainnet.observer/charts/transactions-coinbase-locktime-bip54/",
+    },
+    {
+      title: "mainnet.observer — first BIP54 coinbase by pool",
+      description: "When each mining pool first mined a BIP54-valid coinbase.",
+      href: "https://mainnet.observer/charts/mining-pools-mining-bip54-coinbase/",
     },
     {
       title: "Bitcoin Optech topic",
@@ -166,13 +178,14 @@ export const BIP54 = {
     {
       year: "2025",
       label: "BIP54 published",
-      detail: "Specification merged into bitcoin/bips as BIP54 (Draft).",
+      detail:
+        "Number assigned 2025-04-11 and specification merged into bitcoin/bips on 2025-04-29; later marked Complete.",
     },
     {
       year: "2026",
       label: "Pool forward-compat",
       detail:
-        "WhitePool, MARA, ViaBTC, Foundry and others produce BIP54-compatible coinbases (~40% of recent blocks). Formal activation signaling still not started.",
+        "WhitePool, MARA, ViaBTC, Foundry and others produce BIP54-compatible coinbases (~42% of recent blocks). Formal activation signaling still not started.",
     },
   ],
 } as const;

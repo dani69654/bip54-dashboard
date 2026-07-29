@@ -3,6 +3,10 @@ import { BIP54 } from "@/lib/bip54";
 
 export default function DashboardPage() {
   const readiness = BIP54.poolReadiness;
+  const totalCompatibleBlocks = readiness.pools.reduce(
+    (sum, pool) => sum + pool.compatibleBlocks,
+    0,
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 sm:py-14">
@@ -41,7 +45,7 @@ export default function DashboardPage() {
         <Stat
           label="Proposal status"
           value={BIP54.status}
-          hint="In bitcoin/bips as Draft"
+          hint="In bitcoin/bips as Complete"
         />
         <Stat
           label="Formal signaling"
@@ -50,7 +54,7 @@ export default function DashboardPage() {
           tone="warning"
         />
         <Stat
-          label="Compatible blocks"
+          label="Recent blocks compatible"
           value={`~${readiness.recentSharePct}%`}
           hint={`Coinbase locktime · as of ${readiness.asOf}`}
           tone="good"
@@ -90,17 +94,27 @@ export default function DashboardPage() {
               caption={`~${readiness.recentSharePct}% of recent blocks set nLockTime = height − 1 (${readiness.sourceLabel}, ${readiness.asOf})`}
               tone="good"
             />
-            <ProgressRow
-              label="Specification readiness"
-              value={100}
-              caption="BIP text, rationale, and test vectors published"
-            />
-            <ProgressRow
-              label="Implementation readiness"
-              value={75}
-              caption="Inquisition / Signet demos; Core PR under review"
-            />
           </div>
+
+          <dl className="mb-6 grid gap-3 text-sm sm:grid-cols-2">
+            <div className="surface-muted p-4">
+              <dt className="text-fg">Specification</dt>
+              <dd className="mt-1 text-fg-muted">
+                BIP54 is marked{" "}
+                <span className="text-fg">{BIP54.status}</span> in
+                bitcoin/bips — spec text and rationale are final.
+              </dd>
+            </div>
+            <div className="surface-muted p-4">
+              <dt className="text-fg">Implementation</dt>
+              <dd className="mt-1 text-fg-muted">
+                Bitcoin Core PR{" "}
+                <span className="font-mono text-xs">#35793</span> is open
+                (validation rules without mainnet activation); Signet demos of
+                slow-to-validate blocks exist.
+              </dd>
+            </div>
+          </dl>
 
           <div className="surface-muted p-4 text-sm leading-relaxed text-fg-muted">
             <p className="mb-2 font-medium text-fg">
@@ -165,7 +179,9 @@ export default function DashboardPage() {
               <span className="font-mono text-accent-text">
                 nLockTime = height − 1
               </span>
-              . Counts from {readiness.sourceLabel} as of {readiness.asOf}.
+              , and all-time compatible-block counts (
+              {totalCompatibleBlocks.toLocaleString()} in total). From{" "}
+              {readiness.sourceLabel} as of {readiness.asOf}.
             </p>
           </div>
           <a
@@ -218,8 +234,10 @@ export default function DashboardPage() {
           >
             {readiness.sourceLabel}
           </a>
-          . F2Pool has historically used nLockTime for job metadata and is not
-          listed as BIP54-compatible here.
+          . Only coinbases whose nLockTime equals exactly{" "}
+          <span className="font-mono">height − 1</span> are counted — pools that
+          set the field to some other value for their own purposes do not appear
+          here.
         </p>
       </section>
 

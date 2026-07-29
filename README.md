@@ -24,4 +24,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Notes
 
-Formal version-bit signaling has **not** started (activation method TBD). Some mining pools already produce **BIP54-compatible coinbases** (`nLockTime = height − 1`) — that is forward-compatibility, not a vote for activation. Pool/share figures on the dashboard are snapshot values from [mainnet.observer](https://mainnet.observer/) and should be refreshed periodically.
+BIP54 is marked **Complete** in `bitcoin/bips` (number assigned 2025-04-11, merged 2025-04-29), but that is a document status only: formal version-bit signaling has **not** started and the activation method is still TBD.
+
+Some mining pools already produce **BIP54-compatible coinbases** (`nLockTime = height − 1`) — that is forward-compatibility, not a vote for activation. Pool/share figures on the dashboard are snapshot values as of 2026-07-28 and should be refreshed from these sources:
+
+- share of compatible coinbases — [chart](https://mainnet.observer/charts/transactions-coinbase-locktime-bip54/) · [raw data](https://mainnet.observer/csv/coinbase_locktime_set_bip54_avg.csv) (paired with [`date.csv`](https://mainnet.observer/csv/date.csv))
+- first compatible coinbase per pool — [chart](https://mainnet.observer/charts/mining-pools-mining-bip54-coinbase/) · [raw CSV](https://mainnet.observer/csv/miningpools-mining-bip54-coinbase.csv)
