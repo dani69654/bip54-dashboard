@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Mono, Source_Sans_3, Space_Grotesk } from "next/font/google";
 import { Nav } from "@/components/Nav";
+import { BIP54 } from "@/lib/bip54";
+import { SITE, absoluteUrl } from "@/lib/site";
 import "./globals.css";
 
 const sourceSans = Source_Sans_3({
@@ -22,9 +24,78 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BIP54 Dashboard — Consensus Cleanup",
+  metadataBase: new URL(SITE.url),
+  title: {
+    default: "BIP54 Dashboard — Bitcoin Consensus Cleanup soft fork",
+    template: `%s — ${SITE.shortName}`,
+  },
   description:
-    "Track BIP54 readiness (including pool coinbase compatibility), explore the Consensus Cleanup proposal, and simulate the problems it fixes.",
+    "Track BIP54 (Consensus Cleanup) readiness: mining pool coinbase compatibility, activation status, the four consensus fixes, and interactive simulations.",
+  applicationName: SITE.name,
+  authors: [{ name: "BIP54 Dashboard" }],
+  creator: "BIP54 Dashboard",
+  category: "technology",
+  keywords: [
+    "BIP54",
+    "Consensus Cleanup",
+    "Bitcoin soft fork",
+    "timewarp attack",
+    "64-byte transactions",
+    "legacy sigops limit",
+    "duplicate coinbase",
+    "coinbase nLockTime",
+    "BIP30",
+    "BIP34",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    locale: SITE.locale,
+    url: absoluteUrl("/"),
+    title: "BIP54 Dashboard — Bitcoin Consensus Cleanup soft fork",
+    description:
+      "Pool readiness, activation status, the four consensus fixes, and interactive simulations of the bugs BIP54 closes.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BIP54 Dashboard — Bitcoin Consensus Cleanup soft fork",
+    description:
+      "Pool readiness, activation status, and interactive simulations of the bugs BIP54 closes.",
+    ...(SITE.twitter ? { creator: SITE.twitter } : {}),
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0b0d10",
+  colorScheme: "dark",
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": absoluteUrl("/#website"),
+  url: absoluteUrl("/"),
+  name: SITE.name,
+  inLanguage: "en",
+  description:
+    "Educational dashboard and simulator for BIP54, the Bitcoin Consensus Cleanup soft fork proposal.",
+  about: {
+    "@type": "Thing",
+    name: BIP54.title,
+    sameAs: "https://github.com/bitcoin/bips/blob/master/bip-0054.md",
+  },
 };
 
 export default function RootLayout({
@@ -38,6 +109,10 @@ export default function RootLayout({
       className={`${sourceSans.variable} ${spaceGrotesk.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <Nav />
         <main className="flex-1">{children}</main>
         <footer className="border-t border-border px-6 py-8 text-sm text-fg-subtle">

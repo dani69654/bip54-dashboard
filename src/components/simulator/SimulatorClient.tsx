@@ -27,21 +27,7 @@ export function SimulatorClient() {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10 sm:py-14">
-      <section className="animate-fade-up mb-8 max-w-3xl">
-        <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-accent-text">
-          Interactive learning
-        </p>
-        <h1 className="font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-          Problem simulator
-        </h1>
-        <p className="mt-4 text-lg leading-relaxed text-fg-muted">
-          Each scenario starts with a short guided lesson, then a playground.
-          Follow the steps, move the knobs, and toggle BIP54 to see the
-          difference.
-        </p>
-      </section>
-
+    <div className="mx-auto max-w-6xl px-6 pb-10 sm:pb-14">
       <div className="animate-fade-up-delay-1 mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap gap-2">
           {BIP54.fixes.map((f, i) => (

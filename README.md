@@ -22,6 +22,30 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## SEO
+
+Set the canonical origin before deploying — everything else derives from it:
+
+```bash
+cp .env.example .env.local   # then edit NEXT_PUBLIC_SITE_URL
+```
+
+If `NEXT_PUBLIC_SITE_URL` is unset, `robots.txt` returns `Disallow: /`, so preview
+deployments and local builds cannot be indexed.
+
+What is wired up:
+
+- `metadataBase`, title template, description, keywords and per-page canonicals (`src/app/layout.tsx`, `src/app/simulator/page.tsx`)
+- Open Graph + Twitter card metadata, with generated 1200×630 OG images per route (`src/app/opengraph-image.tsx`, `src/app/simulator/opengraph-image.tsx`, shared frame in `src/lib/og.tsx`)
+- `robots.txt` and `sitemap.xml` as route handlers (`src/app/robots.ts`, `src/app/sitemap.ts`); `lastModified` tracks the data snapshot, not the build time
+- JSON-LD: `WebSite` (layout), `TechArticle` + `Dataset` (dashboard), `WebApplication` (simulator)
+- `viewport` export with `themeColor` / `colorScheme` (the `metadata.themeColor` field is deprecated in Next.js ≥ 14)
+- Both routes are statically prerendered, and the simulator's static content is server-rendered so it is present in the initial HTML rather than behind the client-side Suspense boundary
+
+Post-deploy checklist: verify `/sitemap.xml` and `/robots.txt`, submit the sitemap in
+Google Search Console, and test the JSON-LD with the
+[Rich Results Test](https://search.google.com/test/rich-results).
+
 ## Notes
 
 BIP54 is marked **Complete** in `bitcoin/bips` (number assigned 2025-04-11, merged 2025-04-29), but that is a document status only: formal version-bit signaling has **not** started and the activation method is still TBD.

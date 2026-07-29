@@ -1,5 +1,55 @@
 import Link from "next/link";
 import { BIP54 } from "@/lib/bip54";
+import { absoluteUrl } from "@/lib/site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "TechArticle",
+      "@id": absoluteUrl("/#article"),
+      url: absoluteUrl("/"),
+      headline: "BIP54 Consensus Cleanup: status, readiness and what it fixes",
+      description:
+        "Overview of BIP54, the four consensus weaknesses it fixes, its activation status, and how many mainnet blocks already carry BIP54-compatible coinbases.",
+      inLanguage: "en",
+      dateModified: BIP54.poolReadiness.asOf,
+      about: {
+        "@type": "Thing",
+        name: BIP54.title,
+        sameAs: "https://github.com/bitcoin/bips/blob/master/bip-0054.md",
+      },
+      citation: BIP54.resources.map((resource) => ({
+        "@type": "CreativeWork",
+        name: resource.title,
+        url: resource.href,
+      })),
+    },
+    {
+      "@type": "Dataset",
+      "@id": absoluteUrl("/#pool-readiness"),
+      name: "Mining pools with BIP54-compatible coinbases",
+      description:
+        "Per-pool first block height, date and all-time count of mainnet coinbase transactions with nLockTime = height − 1, plus the share of recent blocks.",
+      inLanguage: "en",
+      temporalCoverage: `2026-02-19/${BIP54.poolReadiness.asOf}`,
+      dateModified: BIP54.poolReadiness.asOf,
+      isAccessibleForFree: true,
+      creator: {
+        "@type": "Organization",
+        name: BIP54.poolReadiness.sourceLabel,
+        url: BIP54.poolReadiness.sourceHref,
+      },
+      distribution: [
+        {
+          "@type": "DataDownload",
+          encodingFormat: "text/csv",
+          contentUrl: BIP54.poolReadiness.poolsHref,
+        },
+      ],
+    },
+  ],
+};
 
 export default function DashboardPage() {
   const readiness = BIP54.poolReadiness;
@@ -10,6 +60,11 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10 sm:py-14">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <section className="animate-fade-up mb-12 max-w-3xl">
         <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-accent-text">
           Bitcoin soft fork proposal
@@ -194,34 +249,56 @@ export default function DashboardPage() {
           </a>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-border">
-          <div className="grid grid-cols-[1.2fr_0.7fr_0.7fr_0.6fr] gap-2 border-b border-border bg-bg-muted px-4 py-2.5 font-mono text-[10px] uppercase tracking-wider text-fg-subtle sm:grid-cols-[1.4fr_0.8fr_0.8fr_0.7fr_1.4fr]">
-            <span>Pool</span>
-            <span>First height</span>
-            <span>First date</span>
-            <span>Blocks</span>
-            <span className="hidden sm:inline">Note</span>
-          </div>
-          {readiness.pools.map((pool) => (
-            <div
-              key={pool.name}
-              className="grid grid-cols-[1.2fr_0.7fr_0.7fr_0.6fr] gap-2 border-b border-border px-4 py-3 text-sm last:border-b-0 sm:grid-cols-[1.4fr_0.8fr_0.8fr_0.7fr_1.4fr]"
-            >
-              <span className="font-medium text-fg">{pool.name}</span>
-              <span className="font-mono text-xs text-fg-muted">
-                {pool.firstHeight.toLocaleString()}
-              </span>
-              <span className="font-mono text-xs text-fg-muted">
-                {pool.firstDate}
-              </span>
-              <span className="font-mono text-xs text-accent-text">
-                {pool.compatibleBlocks.toLocaleString()}
-              </span>
-              <span className="col-span-4 text-xs text-fg-subtle sm:col-span-1 sm:mt-0">
-                {pool.note}
-              </span>
-            </div>
-          ))}
+        <div className="overflow-x-auto rounded-xl border border-border">
+          <table className="w-full min-w-[36rem] border-collapse text-left text-sm">
+            <caption className="sr-only">
+              Mining pools with BIP54-compatible coinbase locktimes, first block
+              and all-time count, as of {readiness.asOf}
+            </caption>
+            <thead>
+              <tr className="border-b border-border bg-bg-muted font-mono text-[10px] uppercase tracking-wider text-fg-subtle">
+                <th scope="col" className="px-4 py-2.5 font-normal">
+                  Pool
+                </th>
+                <th scope="col" className="px-4 py-2.5 font-normal">
+                  First height
+                </th>
+                <th scope="col" className="px-4 py-2.5 font-normal">
+                  First date
+                </th>
+                <th scope="col" className="px-4 py-2.5 font-normal">
+                  Blocks
+                </th>
+                <th scope="col" className="px-4 py-2.5 font-normal">
+                  Note
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {readiness.pools.map((pool) => (
+                <tr key={pool.name} className="border-b border-border last:border-b-0">
+                  <th
+                    scope="row"
+                    className="px-4 py-3 font-medium text-fg"
+                  >
+                    {pool.name}
+                  </th>
+                  <td className="px-4 py-3 font-mono text-xs text-fg-muted">
+                    {pool.firstHeight.toLocaleString()}
+                  </td>
+                  <td className="px-4 py-3 font-mono text-xs text-fg-muted">
+                    <time dateTime={pool.firstDate}>{pool.firstDate}</time>
+                  </td>
+                  <td className="px-4 py-3 font-mono text-xs text-accent-text">
+                    {pool.compatibleBlocks.toLocaleString()}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-fg-subtle">
+                    {pool.note}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <p className="mt-4 text-xs leading-relaxed text-fg-subtle">
