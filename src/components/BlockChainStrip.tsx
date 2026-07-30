@@ -103,7 +103,7 @@ export function BlockChainStrip() {
         <div>
           <h2 className="font-display text-xl font-semibold">Recent blocks</h2>
           <p className="mt-1 max-w-2xl text-sm text-fg-muted">
-            Newest on the left — scroll right for older blocks. A{" "}
+            A{" "}
             <span className="font-mono text-accent-text">BIP54</span> tag means
             the coinbase sets{" "}
             <span className="font-mono text-accent-text">
