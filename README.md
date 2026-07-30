@@ -50,7 +50,11 @@ Google Search Console, and test the JSON-LD with the
 
 BIP54 is marked **Complete** in `bitcoin/bips` (number assigned 2025-04-11, merged 2025-04-29), but that is a document status only: formal version-bit signaling has **not** started and the activation method is still TBD.
 
-Some mining pools already produce **BIP54-compatible coinbases** (`nLockTime = height − 1`) — that is forward-compatibility, not a vote for activation. Pool/share figures on the dashboard are snapshot values as of 2026-07-28 and should be refreshed from these sources:
+Some mining pools already produce **BIP54-compatible coinbases** (`nLockTime = height − 1`) — that is forward-compatibility, not a vote for activation.
+
+Pool/share figures load **live in the browser** from mainnet.observer CSVs (via same-origin `/data/*` rewrites in `next.config.ts`, because the upstream host does not send CORS headers). The HTML first paints a baked-in snapshot from `src/lib/bip54.ts` and falls back to it if the fetch fails:
 
 - share of compatible coinbases — [chart](https://mainnet.observer/charts/transactions-coinbase-locktime-bip54/) · [raw data](https://mainnet.observer/csv/coinbase_locktime_set_bip54_avg.csv) (paired with [`date.csv`](https://mainnet.observer/csv/date.csv))
 - first compatible coinbase per pool — [chart](https://mainnet.observer/charts/mining-pools-mining-bip54-coinbase/) · [raw CSV](https://mainnet.observer/csv/miningpools-mining-bip54-coinbase.csv)
+
+On Cloudflare Pages this needs the Next.js runtime (so `next.config.ts` rewrites can proxy `/data/*`). A pure static-asset export will not proxy those paths — in that case the UI keeps the snapshot and shows “Snapshot”.

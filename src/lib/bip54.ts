@@ -17,7 +17,8 @@ export const BIP54 = {
   /**
    * Forward-compatible coinbase locktimes (nLockTime = height − 1).
    * This is readiness / compatibility, NOT formal soft-fork signaling.
-   * Source: mainnet.observer (as of 2026-07-28).
+   * Snapshot fallback for SSR / failed live fetch. The dashboard refreshes
+   * these figures client-side from mainnet.observer CSVs (see pool-readiness.ts).
    */
   poolReadiness: {
     asOf: "2026-07-28",
