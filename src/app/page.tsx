@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BlockChainStrip } from "@/components/BlockChainStrip";
 import { LivePoolReadiness } from "@/components/LivePoolReadiness";
 import { BIP54 } from "@/lib/bip54";
 import { POOL_READINESS_FALLBACK } from "@/lib/pool-readiness";
@@ -91,6 +92,8 @@ export default function DashboardPage() {
       </section>
 
       <div className="mb-8 hairline" />
+
+      <BlockChainStrip />
 
       <LivePoolReadiness initial={POOL_READINESS_FALLBACK} />
 

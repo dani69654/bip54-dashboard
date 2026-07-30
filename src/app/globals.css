@@ -161,6 +161,37 @@ a {
   );
 }
 
+.block-strip-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent)
+    var(--bg-muted);
+}
+
+.block-strip-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.block-strip-scroll::-webkit-scrollbar-track {
+  margin-inline: 0.25rem;
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.block-strip-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--accent) 45%, var(--bg-muted)),
+    var(--accent)
+  );
+  border: 2px solid var(--bg-muted);
+  border-radius: 999px;
+}
+
+.block-strip-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-text);
+}
+
 input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
