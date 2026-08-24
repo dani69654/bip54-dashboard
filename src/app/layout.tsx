@@ -26,17 +26,18 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: "BIP54 Dashboard — Bitcoin Consensus Cleanup soft fork",
+    default: "BIP54 — Bitcoin Consensus Cleanup soft fork dashboard",
     template: `%s — ${SITE.shortName}`,
   },
   description:
-    "Track BIP54 (Consensus Cleanup) readiness: mining pool coinbase compatibility, activation status, the four consensus fixes, and interactive simulations.",
+    "BIP54 (Consensus Cleanup) dashboard: live mining-pool coinbase compatibility, activation status, the four consensus fixes BIP54 closes, and interactive simulations.",
   applicationName: SITE.name,
   authors: [{ name: "BIP54 Dashboard" }],
   creator: "BIP54 Dashboard",
   category: "technology",
   keywords: [
     "BIP54",
+    "BIP 54",
     "Consensus Cleanup",
     "Bitcoin soft fork",
     "timewarp attack",
@@ -53,15 +54,15 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: SITE.locale,
     url: absoluteUrl("/"),
-    title: "BIP54 Dashboard — Bitcoin Consensus Cleanup soft fork",
+    title: "BIP54 — Bitcoin Consensus Cleanup soft fork dashboard",
     description:
-      "Pool readiness, activation status, the four consensus fixes, and interactive simulations of the bugs BIP54 closes.",
+      "Live pool readiness, activation status, the four consensus fixes, and interactive simulations of the bugs BIP54 closes.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BIP54 Dashboard — Bitcoin Consensus Cleanup soft fork",
+    title: "BIP54 — Bitcoin Consensus Cleanup soft fork dashboard",
     description:
-      "Pool readiness, activation status, and interactive simulations of the bugs BIP54 closes.",
+      "Live pool readiness, activation status, and interactive simulations of the bugs BIP54 closes.",
     ...(SITE.twitter ? { creator: SITE.twitter } : {}),
   },
   robots: {

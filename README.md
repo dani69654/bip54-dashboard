@@ -27,11 +27,12 @@ Open [http://localhost:3000](http://localhost:3000).
 Set the canonical origin before deploying — everything else derives from it:
 
 ```bash
-cp .env.example .env.local   # then edit NEXT_PUBLIC_SITE_URL
+cp .env.example .env.local   # then edit NEXT_PUBLIC_SITE_URL if needed
 ```
 
-If `NEXT_PUBLIC_SITE_URL` is unset, `robots.txt` returns `Disallow: /`, so preview
-deployments and local builds cannot be indexed.
+Production builds default to `https://bip-54.com` when the env var is unset.
+Local `next dev` uses `http://localhost:3000`, and in that case `robots.txt`
+returns `Disallow: /` so preview deployments are not indexed.
 
 What is wired up:
 
