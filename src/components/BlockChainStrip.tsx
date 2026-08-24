@@ -10,6 +10,9 @@ import {
   type MempoolBlock,
 } from "@/lib/mempool-blocks";
 
+/** How often to check mempool.space for a new tip block. */
+const TIP_POLL_MS = 30_000;
+
 function toPlaceholder(block: MempoolBlock): ChainBlock {
   return {
     id: block.id,
@@ -29,7 +32,10 @@ export function BlockChainStrip() {
   const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
   const [loadingOlder, setLoadingOlder] = useState(false);
+  const [nowSec, setNowSec] = useState(() => Math.floor(Date.now() / 1000));
   const loadingOlderRef = useRef(false);
+  const pollingTipRef = useRef(false);
+  const tipHeightRef = useRef<number | null>(null);
   const oldestHeightRef = useRef<number | null>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
 
@@ -42,6 +48,7 @@ export function BlockChainStrip() {
         const page = await fetchBlocksPage(tip, controller.signal);
         if (controller.signal.aborted) return;
 
+        tipHeightRef.current = tip;
         setBlocks(page.map(toPlaceholder));
         oldestHeightRef.current =
           page.length > 0 ? page[page.length - 1]!.height : tip;
@@ -61,6 +68,44 @@ export function BlockChainStrip() {
 
     return () => controller.abort();
   }, []);
+
+  useEffect(() => {
+    if (initialLoading || error) return;
+
+    async function pollTip() {
+      if (pollingTipRef.current) return;
+      const knownTip = tipHeightRef.current;
+      if (knownTip === null) return;
+
+      pollingTipRef.current = true;
+      setNowSec(Math.floor(Date.now() / 1000));
+
+      try {
+        const tip = await fetchTipHeight();
+        if (tip <= knownTip) return;
+
+        const page = await fetchBlocksPage(tip);
+        const fresh = page.filter((block) => block.height > knownTip);
+        if (fresh.length === 0) return;
+
+        tipHeightRef.current = tip;
+        setBlocks((prev) => mergeByHeight(prev, fresh.map(toPlaceholder)));
+
+        const enriched = await enrichBlocks(fresh);
+        setBlocks((prev) => mergeByHeight(prev, enriched, true));
+      } catch (err) {
+        console.warn("Tip poll failed:", err);
+      } finally {
+        pollingTipRef.current = false;
+      }
+    }
+
+    const id = window.setInterval(() => {
+      void pollTip();
+    }, TIP_POLL_MS);
+
+    return () => window.clearInterval(id);
+  }, [initialLoading, error]);
 
   async function loadOlder() {
     if (loadingOlderRef.current || oldestHeightRef.current === null) return;
@@ -139,6 +184,7 @@ export function BlockChainStrip() {
                     key={block.id}
                     block={block}
                     isTip={index === 0}
+                    nowSec={nowSec}
                   />
                 ))}
             {loadingOlder && <SkeletonBlock />}
@@ -183,12 +229,14 @@ function mergeByHeight(
 function BlockCube({
   block,
   isTip,
+  nowSec,
 }: {
   block: ChainBlock;
   isTip: boolean;
+  nowSec: number;
 }) {
   const fill = medianFeeColor(block.medianFee);
-  const time = formatAge(block.timestamp);
+  const time = formatAge(block.timestamp, nowSec);
 
   return (
     <article
@@ -251,8 +299,8 @@ function formatFee(fee: number): string {
   return `${Math.round(fee)}`;
 }
 
-function formatAge(timestampSec: number): string {
-  const seconds = Math.max(0, Math.floor(Date.now() / 1000 - timestampSec));
+function formatAge(timestampSec: number, nowSec: number): string {
+  const seconds = Math.max(0, Math.floor(nowSec - timestampSec));
   if (seconds < 60) return `${seconds}s`;
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes}m`;

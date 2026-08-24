@@ -120,6 +120,23 @@ function formatPct(fraction: number, digits = 1): string {
   return (fraction * 100).toFixed(digits);
 }
 
+/**
+ * Today's row is often 0.0000 while the day is still open / unfinalized.
+ * Prefer the most recent day with a positive share.
+ */
+export function pickLatestShareSample(
+  series: { date: string; share: number }[],
+): { latest: { date: string; share: number }; endIndex: number } {
+  for (let i = series.length - 1; i >= 0; i--) {
+    const point = series[i]!;
+    if (point.share > 0) {
+      return { latest: point, endIndex: i };
+    }
+  }
+  const endIndex = series.length - 1;
+  return { latest: series[endIndex]!, endIndex };
+}
+
 export function buildPoolReadiness(
   poolsText: string,
   avgText: string,
@@ -127,8 +144,8 @@ export function buildPoolReadiness(
 ): PoolReadiness {
   const pools = parsePoolsCsv(poolsText);
   const series = parseShareSeries(avgText, dateText);
-  const latest = series[series.length - 1]!;
-  const window = series.slice(-7);
+  const { latest, endIndex } = pickLatestShareSample(series);
+  const window = series.slice(Math.max(0, endIndex - 6), endIndex + 1);
   const trailingAvg =
     window.reduce((sum, point) => sum + point.share, 0) / window.length;
 
