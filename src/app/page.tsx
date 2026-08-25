@@ -38,6 +38,8 @@ const jsonLd = {
       temporalCoverage: `2026-02-19/${BIP54.poolReadiness.asOf}`,
       dateModified: BIP54.poolReadiness.asOf,
       isAccessibleForFree: true,
+      license: "https://opensource.org/licenses/MIT",
+      sameAs: BIP54.poolReadiness.chartHref,
       creator: {
         "@type": "Organization",
         name: BIP54.poolReadiness.sourceLabel,
