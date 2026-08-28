@@ -68,6 +68,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+    "max-image-preview": "large",
+    "max-snippet": -1,
+    "max-video-preview": -1,
     googleBot: {
       index: true,
       follow: true,
@@ -75,6 +78,11 @@ export const metadata: Metadata = {
       "max-snippet": -1,
       "max-video-preview": -1,
     },
+  },
+  other: {
+    // Bing (and therefore DuckDuckGo) reads this, not googlebot.
+    bingbot:
+      "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
   },
 };
 

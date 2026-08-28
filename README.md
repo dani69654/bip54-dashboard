@@ -44,7 +44,8 @@ What is wired up:
 - Both routes are statically prerendered, and the simulator's static content is server-rendered so it is present in the initial HTML rather than behind the client-side Suspense boundary
 
 Post-deploy checklist: verify `/sitemap.xml` and `/robots.txt`, submit the sitemap in
-Google Search Console, and test the JSON-LD with the
+Google Search Console and [Bing Webmaster Tools](https://www.bing.com/webmasters)
+(DuckDuckGo snippets come from Bing), and test the JSON-LD with the
 [Rich Results Test](https://search.google.com/test/rich-results).
 
 ## Notes
