@@ -1,20 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Force HTTPS so Google/Bing only ever see one protocol version of each
-  // page. Without this, http://bip-54.com serves the same content as
-  // https://bip-54.com, and Search Console flags the http copies as
-  // "Alternative page with proper canonical tag" (not indexed).
-  async redirects() {
-    return [
-      {
-        source: "/:path*",
-        has: [{ type: "header", key: "x-forwarded-proto", value: "http" }],
-        destination: `https://bip-54.com/:path*`,
-        permanent: true,
-      },
-    ];
-  },
+  // HTTP -> HTTPS is handled by Cloudflare at the edge (it preserves the
+  // path). A next.config redirect must NOT be used for this: Cloudflare's
+  // edge does not interpolate `:path*` in the destination, so the Location
+  // header ends up as the literal `https://bip-54.com/:path*` and the site
+  // never loads.
 
   // Same-origin proxies so the browser can load mainnet.observer CSVs
   // without hitting CORS (client-side fetch from the dashboard).
