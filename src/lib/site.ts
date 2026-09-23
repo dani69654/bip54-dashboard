@@ -2,6 +2,7 @@
  * Canonical origin for metadata, sitemap, robots and OG images.
  * Override with NEXT_PUBLIC_SITE_URL (no trailing slash) when needed.
  *
+ * 
  * Production defaults to https://bip-54.com so Cloudflare/OpenNext builds
  * stay indexable even if the env var was forgotten at deploy time.
  * Local `next dev` keeps localhost so preview crawls stay blocked.
