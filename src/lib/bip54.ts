@@ -12,7 +12,7 @@ export const BIP54 = {
     method: "Not yet finalized",
     signaling: "Not started",
     threshold: "TBD (historically ~90–95% of blocks in a difficulty period)",
-    note: "No activation bit has been assigned. Previous soft forks used BIP9 or BIP8 version-bit signaling. BIP54’s activation mechanism is still under community discussion — separate from pool forward-compatibility.",
+    note: "No activation bit has been assigned. Previous soft forks used BIP9 or BIP8 version-bit signaling. BIP54’s activation mechanism is still under community discussion — separate from pool forward-compatibility. In November 2026 Antoine Riard (speaking for himself) suggested it could be realistic to start considering activation in the second half of 2027, if the community agrees by then. F2Pool has said it will not signal before a majority is reached.",
   },
   /**
    * Forward-compatible coinbase locktimes (nLockTime = height − 1).
@@ -21,10 +21,10 @@ export const BIP54 = {
    * these figures client-side from mainnet.observer CSVs (see pool-readiness.ts).
    */
   poolReadiness: {
-    asOf: "2026-07-28",
+    asOf: "2026-11-16",
     recentSharePct: 42,
     recentShareNote:
-      "On 2026-07-28, 42.4% of mainnet coinbases set nLockTime = height − 1 (BIP54-compatible); the trailing 7-day average was 41.6%. This is not version-bit signaling.",
+      "On 2026-11-16, 41.7% of mainnet coinbases set nLockTime = height − 1 (BIP54-compatible); the trailing 7-day average was 39.2%. This is not version-bit signaling.",
     sourceLabel: "mainnet.observer",
     sourceHref: "https://mainnet.observer/",
     chartHref:
@@ -36,22 +36,22 @@ export const BIP54 = {
         name: "Foundry USA",
         firstHeight: 952880,
         firstDate: "2026-06-08",
-        compatibleBlocks: 1834,
+        compatibleBlocks: 5936,
         note: "Largest adopter by compatible-block count so far",
       },
       {
         name: "MARA Pool",
         firstHeight: 940548,
         firstDate: "2026-03-13",
-        compatibleBlocks: 938,
-        note: "Early major-pool adopter",
+        compatibleBlocks: 1753,
+        note: "Early major-pool adopter (first big pool, March 2026)",
       },
       {
         name: "ViaBTC",
         firstHeight: 949094,
         firstDate: "2026-05-12",
-        compatibleBlocks: 886,
-        note: "Partial rollout reported at first (mixed pool software)",
+        compatibleBlocks: 2422,
+        note: "Second-largest adopter; partial rollout at first (mixed pool software)",
       },
       {
         name: "WhitePool",
@@ -64,7 +64,7 @@ export const BIP54 = {
         name: "Solo CK",
         firstHeight: 951408,
         firstDate: "2026-05-28",
-        compatibleBlocks: 3,
+        compatibleBlocks: 8,
         note: "Solo mining via ckpool",
       },
       {
@@ -78,7 +78,7 @@ export const BIP54 = {
         name: "Unknown",
         firstHeight: 940484,
         firstDate: "2026-03-13",
-        compatibleBlocks: 2,
+        compatibleBlocks: 3,
         note: "Unattributed miners",
       },
     ],
@@ -160,8 +160,20 @@ export const BIP54 = {
     },
     {
       title: "Bitcoin Core implementation PR",
-      description: "BIP54 validation rules (regtest) without mainnet activation.",
+      description:
+        "BIP54 validation rules (regtest) without mainnet activation — under review.",
       href: "https://github.com/bitcoin/bitcoin/pull/35793",
+    },
+    {
+      title: "Bitcoin Core: miner Murch-Zawy rule",
+      description:
+        "Merged Sept 2026: block templates already respect BIP54's period-duration rule.",
+      href: "https://github.com/bitcoin/bitcoin/pull/35949",
+    },
+    {
+      title: "Bitcoin Inquisition (signet)",
+      description: "BIP54 implementation merged Feb 2026 for testing on signet.",
+      href: "https://github.com/bitcoin-inquisition/bitcoin/pull/99",
     },
   ],
   milestones: [
@@ -183,10 +195,34 @@ export const BIP54 = {
         "Number assigned 2025-04-11 and specification merged into bitcoin/bips on 2025-04-29; later marked Complete.",
     },
     {
-      year: "2026",
+      year: "Feb 2026",
+      label: "Signet testing",
+      detail:
+        "Bitcoin Inquisition merges BIP54, so the rules can be tested on signet. WhitePool mines the first BIP54-compatible mainnet coinbases.",
+    },
+    {
+      year: "Mar–Jun 2026",
       label: "Pool forward-compat",
       detail:
-        "WhitePool, MARA, ViaBTC, Foundry and others produce BIP54-compatible coinbases (~42% of recent blocks). Formal activation signaling still not started.",
+        "MARA, ViaBTC and Foundry switch to BIP54-compatible coinbases, reaching ~40% of blocks. On 2026-05-22 the BIP is moved to Complete.",
+    },
+    {
+      year: "Aug 2026",
+      label: "F2Pool holds back",
+      detail:
+        "F2Pool says it will not signal for BIP54 before a formal majority is reached, criticizing the bundling of four changes, but would update its nodes if it gains support.",
+    },
+    {
+      year: "Sep 2026",
+      label: "Core miner rule merged",
+      detail:
+        "Bitcoin Core merges #35949: block templates enforce BIP54's Murch-Zawy timestamp rule. The full validation PR #35793 stays under review.",
+    },
+    {
+      year: "Nov 2026",
+      label: "Activation talk",
+      detail:
+        "Antoine Riard suggests activation could realistically be considered in the second half of 2027. The 64-byte transaction rule remains the most debated part.",
     },
   ],
 } as const;

@@ -52,9 +52,9 @@ const steps = [
   },
   {
     label: "Implementation",
-    state: "done",
+    state: "progress",
     detail:
-      "Bitcoin Core pull request implements the rules on regtest, without mainnet activation parameters.",
+      "Bitcoin Core #35793 (rules on regtest, no mainnet activation) is under review. The miner-side rule (#35949) was merged in Sept 2026, and BIP54 runs on signet via Bitcoin Inquisition.",
   },
   {
     label: "Miner readiness",

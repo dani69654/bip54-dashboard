@@ -39,7 +39,8 @@ export const FAQ: FaqItem[] = [
   {
     q: "When will BIP54 activate?",
     a: [
-      "There is no activation date yet. The specification is complete and a Bitcoin Core implementation exists, but no activation mechanism, version bit or signaling period has been agreed. Earlier soft forks used BIP9 or BIP8 version-bit signaling with a threshold of about 90–95% of blocks in a difficulty period.",
+      "There is no activation date yet. The specification is complete and a Bitcoin Core implementation is under review, but no activation mechanism, version bit or signaling period has been agreed. Earlier soft forks used BIP9 or BIP8 version-bit signaling with a threshold of about 90–95% of blocks in a difficulty period.",
+      "In November 2026 Antoine Riard, speaking only for himself, said it could be realistic to start considering activation in the second half of 2027 if the community agrees by then. That is an informal estimate, not a schedule.",
     ],
     links: [{ label: "Activation status", href: "/activation" }],
   },
@@ -49,6 +50,20 @@ export const FAQ: FaqItem[] = [
       `Many pools already produce coinbases that follow BIP54's new rule, with nLockTime set to the block height minus one. On ${BIP54.poolReadiness.asOf} about ${BIP54.poolReadiness.recentSharePct}% of mainnet blocks did, including blocks from Foundry USA, MARA Pool and ViaBTC. That is forward compatibility, not activation signaling: pools are getting ready, not voting.`,
     ],
     links: [{ label: "Live pool readiness", href: "/" }],
+  },
+  {
+    q: "Does every mining pool support BIP54?",
+    a: [
+      "No. F2Pool said in August 2026 that it will not signal for BIP54 before a formal majority is reached. Its founder criticized bundling four changes into one soft fork, though the pool said it would update its nodes if the proposal gains the required support. Producing BIP54-compatible coinbases today is voluntary, and roughly 40% of blocks do.",
+    ],
+    links: [{ label: "Pool readiness table", href: "/activation" }],
+  },
+  {
+    q: "Which part of BIP54 is most debated?",
+    a: [
+      "The rule making 64-byte transactions invalid. Some argue that SPV verifiers can protect themselves without a consensus change, and Antoine Riard described it in November 2026 as still the most contested rule. The timewarp, sigops and coinbase fixes have drawn less objection.",
+    ],
+    links: [{ label: "64-byte transactions explained", href: "/64-byte-transactions" }],
   },
   {
     q: "Do I need to do anything as a Bitcoin user?",

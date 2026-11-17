@@ -109,9 +109,11 @@ export function LivePoolReadiness({
               <dt className="text-fg">Implementation</dt>
               <dd className="mt-1 text-fg-muted">
                 Bitcoin Core PR{" "}
-                <span className="font-mono text-xs">#35793</span> is open
-                (validation rules without mainnet activation); Signet demos of
-                slow-to-validate blocks exist.
+                <span className="font-mono text-xs">#35793</span> is under
+                review (validation rules without mainnet activation). The miner
+                side (<span className="font-mono text-xs">#35949</span>) was
+                merged in Sept 2026, and BIP54 runs on signet via Bitcoin
+                Inquisition.
               </dd>
             </div>
           </dl>

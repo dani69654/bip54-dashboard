@@ -145,6 +145,7 @@ export const TOPICS: Topic[] = [
         paragraphs: [
           "BIP54 makes any transaction whose witness-stripped serialization is exactly 64 bytes invalid by consensus. With no 64-byte transactions allowed, a leaf can never be mistaken for an inner node, so Merkle proofs become unambiguous given a block header.",
           "The same rule is also proposed on its own as BIP53. BIP54 bundles it with the other three fixes.",
+          "Of the four fixes, this is the most debated. Critics argue that SPV verifiers can defend themselves by also checking the tree depth, without a consensus change. Supporters reply that a one-line rule removing the ambiguity for good is simpler and safer than relying on every verifier to get the mitigation right.",
         ],
         bullets: [
           "Such transactions have been non-standard in Bitcoin Core for years, so nodes already refuse to relay them.",
