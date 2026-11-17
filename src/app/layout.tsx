@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { IBM_Plex_Mono, Source_Sans_3, Space_Grotesk } from "next/font/google";
 import { Nav } from "@/components/Nav";
 import { BIP54 } from "@/lib/bip54";
@@ -91,6 +92,15 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
+/**
+ * Cloudflare Web Analytics site token (public — it ends up in the HTML anyway).
+ * Find it in Cloudflare → Analytics & Logs → Web Analytics → bip-54.com →
+ * "Manage site" → JS snippet. Inlined at build time, so it must be set in the
+ * build environment; the hardcoded fallback keeps CI builds tracked.
+ */
+const CF_BEACON_TOKEN =
+  process.env.NEXT_PUBLIC_CF_BEACON_TOKEN ?? "e583f3c38bcf4c0ab436f8fc5231b2de";
+
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -136,6 +146,16 @@ export default function RootLayout({
             </p>
           </div>
         </footer>
+        {CF_BEACON_TOKEN ? (
+          <Script
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            strategy="afterInteractive"
+            data-cf-beacon={JSON.stringify({
+              token: CF_BEACON_TOKEN,
+              spa: true,
+            })}
+          />
+        ) : null}
       </body>
     </html>
   );

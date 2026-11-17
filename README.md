@@ -48,6 +48,15 @@ Google Search Console and [Bing Webmaster Tools](https://www.bing.com/webmasters
 (DuckDuckGo snippets come from Bing), and test the JSON-LD with the
 [Rich Results Test](https://search.google.com/test/rich-results).
 
+## Analytics
+
+Cloudflare Web Analytics' automatic injection does not apply to responses
+served by the OpenNext Worker, so the beacon is added explicitly in
+`src/app/layout.tsx`. Set `NEXT_PUBLIC_CF_BEACON_TOKEN` to the site token
+(Cloudflare → Web Analytics → bip-54.com → Manage site → JS snippet). It is
+inlined at **build** time; the production token is hardcoded as a fallback in the layout,
+so builds without the env var are still tracked. An empty value disables it.
+
 ## Notes
 
 BIP54 is marked **Complete** in `bitcoin/bips` (number assigned 2025-04-11, merged 2025-04-29), but that is a document status only: formal version-bit signaling has **not** started and the activation method is still TBD.
