@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { BIP54 } from "@/lib/bip54";
 import { absoluteUrl } from "@/lib/site";
+import { TOPICS, TOPICS_UPDATED_AT } from "@/lib/topics";
 
 /**
  * lastModified tracks the data snapshot, but must also advance when crawl
@@ -28,5 +29,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly",
       priority: 0.8,
     },
+    {
+      url: absoluteUrl("/activation"),
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: absoluteUrl("/faq"),
+      lastModified: new Date(`${TOPICS_UPDATED_AT}T00:00:00Z`),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    ...TOPICS.map((topic) => ({
+      url: absoluteUrl(`/${topic.slug}`),
+      lastModified: new Date(`${TOPICS_UPDATED_AT}T00:00:00Z`),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
   ];
 }

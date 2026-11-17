@@ -3,6 +3,7 @@ import { BlockChainStrip } from "@/components/BlockChainStrip";
 import { LivePoolReadiness } from "@/components/LivePoolReadiness";
 import { BIP54 } from "@/lib/bip54";
 import { POOL_READINESS_FALLBACK } from "@/lib/pool-readiness";
+import { TOPICS } from "@/lib/topics";
 import { absoluteUrl } from "@/lib/site";
 
 const jsonLd = {
@@ -140,12 +141,23 @@ export default function DashboardPage() {
                   {fix.fix}
                 </div>
               </div>
-              <Link
-                href={`/simulator?scenario=${fix.id}`}
-                className="mt-4 inline-flex text-sm text-accent-text transition hover:underline"
-              >
-                Simulate this problem →
-              </Link>
+              <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                {TOPICS.filter((t) => t.fixId === fix.id).map((t) => (
+                  <Link
+                    key={t.slug}
+                    href={`/${t.slug}`}
+                    className="text-accent-text transition hover:underline"
+                  >
+                    Full explanation →
+                  </Link>
+                ))}
+                <Link
+                  href={`/simulator?scenario=${fix.id}`}
+                  className="text-fg-muted transition hover:text-fg hover:underline"
+                >
+                  Simulate this problem →
+                </Link>
+              </div>
             </article>
           ))}
         </div>

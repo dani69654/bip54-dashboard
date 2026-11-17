@@ -3,7 +3,9 @@ import Script from "next/script";
 import { IBM_Plex_Mono, Source_Sans_3, Space_Grotesk } from "next/font/google";
 import { Nav } from "@/components/Nav";
 import { BIP54 } from "@/lib/bip54";
+import Link from "next/link";
 import { SITE, absoluteUrl } from "@/lib/site";
+import { TOPICS } from "@/lib/topics";
 import "./globals.css";
 
 const sourceSans = Source_Sans_3({
@@ -135,7 +137,37 @@ export default function RootLayout({
         <Nav />
         <main className="flex-1">{children}</main>
         <footer className="border-t border-border px-6 py-8 text-sm text-fg-subtle">
-          <div className="mx-auto flex max-w-6xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <nav
+            aria-label="Site"
+            className="mx-auto mb-6 grid max-w-6xl gap-6 sm:grid-cols-2"
+          >
+            <div>
+              <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-fg-subtle">
+                The four fixes
+              </p>
+              <ul className="grid gap-1.5">
+                {TOPICS.map((t) => (
+                  <li key={t.slug}>
+                    <Link href={`/${t.slug}`} className="text-fg-muted hover:text-fg">
+                      {t.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="mb-2 font-mono text-xs uppercase tracking-[0.2em] text-fg-subtle">
+                BIP54
+              </p>
+              <ul className="grid gap-1.5">
+                <li><Link href="/" className="text-fg-muted hover:text-fg">Dashboard</Link></li>
+                <li><Link href="/activation" className="text-fg-muted hover:text-fg">Activation status</Link></li>
+                <li><Link href="/simulator" className="text-fg-muted hover:text-fg">Simulator</Link></li>
+                <li><Link href="/faq" className="text-fg-muted hover:text-fg">FAQ</Link></li>
+              </ul>
+            </div>
+          </nav>
+          <div className="mx-auto flex max-w-6xl flex-col gap-2 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
             <p>
               Educational dashboard for{" "}
               <span className="text-fg-muted">BIP54 Consensus Cleanup</span>.
