@@ -6,17 +6,15 @@ import { BIP54 } from "@/lib/bip54";
 import { absoluteUrl } from "@/lib/site";
 import { TOPICS, TOPICS_UPDATED_AT, getTopic } from "@/lib/topics";
 
-type Props = { params: Promise<{ topic: string }> };
+/**
+ * Shared body for the explainer pages. Each topic has its own static route
+ * folder (src/app/<slug>/) rather than a dynamic [topic] segment: OpenNext on
+ * Cloudflare returned 404 for the prerendered pages of a dynamic segment with
+ * dynamicParams = false.
+ */
 
-// Only the explainer slugs exist; anything else under /<x> is a 404.
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return TOPICS.map((topic) => ({ topic: topic.slug }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const topic = getTopic((await params).topic);
+export function topicMetadata(slug: string): Metadata {
+  const topic = getTopic(slug);
   if (!topic) return {};
   const path = `/${topic.slug}`;
   return {
@@ -35,8 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function TopicPage({ params }: Props) {
-  const topic = getTopic((await params).topic);
+export function TopicArticle({ slug }: { slug: string }) {
+  const topic = getTopic(slug);
   if (!topic) notFound();
 
   const path = `/${topic.slug}`;

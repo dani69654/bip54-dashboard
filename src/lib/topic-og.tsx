@@ -2,20 +2,11 @@ import { ImageResponse } from "next/og";
 import { OG_SIZE, OgFrame } from "@/lib/og";
 import { TOPICS, getTopic } from "@/lib/topics";
 
-export const alt = "BIP54 explainer";
-export const size = OG_SIZE;
-export const contentType = "image/png";
+export const TOPIC_OG_SIZE = OG_SIZE;
 
-export function generateStaticParams() {
-  return TOPICS.map((topic) => ({ topic: topic.slug }));
-}
-
-export default async function OpengraphImage({
-  params,
-}: {
-  params: Promise<{ topic: string }>;
-}) {
-  const topic = getTopic((await params).topic) ?? TOPICS[0];
+/** OG image for an explainer page; each route's opengraph-image.tsx calls this. */
+export function topicOgImage(slug: string) {
+  const topic = getTopic(slug) ?? TOPICS[0];
   return new ImageResponse(
     (
       <OgFrame
@@ -29,6 +20,6 @@ export default async function OpengraphImage({
         }))}
       />
     ),
-    size,
+    TOPIC_OG_SIZE,
   );
 }
